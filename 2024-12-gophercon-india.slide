@@ -1,7 +1,7 @@
 # Operationalising golangci-lint
 : @formatter:off
 Leveraging Go Linters for Robust Code Quality
-31 Aug 2024
+01 Dec 2024
 Tags: linters, golangci-lint
 Summary: Configuring golangci-lint for better Go code.
 
@@ -15,27 +15,10 @@ https://www.linkedin.com/in/skaranth90/
 
 ## Agenda
 
-- About me
-- What is a linter?
+- What are linters?
 - Why use linters?
 - Examples
-- How to use golangci-lint?
-
-## About me
-
-- Working as a Software Engineer in Bangalore since 2012.
-- 8 years in Go, many more years to go.
-- Maintainer of [github.com/matryer/moq][moq] - Interface mocking tool for go generate.
-- Working in the SaaS Security Posture Management (SSPM) team at Netskope as a Staff Engineer.
-
-[moq]: https://github.com/matryer/moq
-
-: I started working as a Software Engineer in 2012 (not in Go to begin with). Worked in Go at redBus
-: and Gojek before my current company. I also dabbled in open source and I am not that active now
-: but I do a little maintenance on moq, a tool for generating mock implementations for interfaces.
-: Finally, I am currently working as a Staff Engineer in the SSPM team. SSPM is a tool that helps
-: protect cloud apps by finding and fixing security risks.
-: BTW, Netskope is hiring so if you are interested, check out the careers page.
+- How to use `golangci-lint`?
 
 ## What are linters?
 
@@ -47,8 +30,6 @@ In simple terms, a linter identifies and flags predefined 'patterns'. These patt
 related to potential bugs or code style.
 
 : Static code analysis means that we analyze the code without executing it.
-: I first came across linters when I was working in Node.js. I learnt a lot about the language, or
-: rather, the quirks and pitfalls inherent to JS and it completely changed the way I wrote JS.
 
 ## Why use linters?
 
@@ -68,9 +49,9 @@ related to potential bugs or code style.
 
 : [Shift-Left Testing]: If you think of the feature lifecycle, we have product requirement
 : gathering, architectural design, implementation with unit tests, integration tests etc. The idea
-: is to try and move the identification of the issue 'left'. So if there was a problem you usually
-: catch in integration tests, try to catch in unit tests. In this case, detection of bug can move
-: from unit tests to linters. Ideally, the IDE should flag issues right when we are coding.
+: is to try and move the identification of the issue 'left'. So if there was a problem that you
+: usually catch in integration tests, try to catch in unit tests. In this case, detection of bug can
+: move from unit tests to linters. Ideally, the IDE should flag issues right when we are coding.
 : [Consistency] For code constructs + package/function/type names. Ex: Effective Go guidelines on
 : package names. Consistency helps readability which in turn helps maintainability.
 
@@ -78,14 +59,8 @@ related to potential bugs or code style.
 
 : To understand why we would want to use linters, lets look at some examples. I am going to show
 : some code snippets and I want you to try and spot the issue. The examples are a bit contrived but
-: that should be okay for the purposes of this discussion. I will also show some examples of bugs
-: that are harder to catch in tests as I mentioned in the previous slide.
-
-## Trial
-
-.play -edit demo-code/printf/main.go /START/,/END/
-
-## Example #1
+: that should be okay for the purposes of this discussion. I will also show an example of a bug
+: that is harder to catch in tests.
 
 ## Example #1
 
@@ -120,35 +95,9 @@ type that implements error, or to any interface type
 
 ## Example #2
 
-.code demo-code/rowserrv1/main.go /START FETCH/,/END FETCH/
-
-## Example #2
-
-.play -edit demo-code/rowserrv1/main.go /START DEMO/,/END DEMO/
-
-## Example #2
-
-Linter that can catch this issue - [rowserrcheck][rowserrcheck]:
-
-```
-rowserrv1/main.go:82:30: rows.Err must be checked (rowserrcheck)
-        rows, err := db.QueryContext(ctx, qry)
-                                    ^
-```
-
-[rowserrcheck]: https://github.com/jingyugao/rowserrcheck
-
-Issue can be fixed with a `rows.Err()` check:
-
-.play -edit demo-code/rowserrv2/main.go /START/,/END/
-
-## Example #3
-
-## Example #3
-
 .play -edit demo-code/urlqueryv1/main.go /START/,/END/
 
-## Example #3
+## Example #2
 
 One of the _many_ detections in [staticcheck][staticcheck-sa4027] can flag this:
 
@@ -165,37 +114,33 @@ Small changes are needed to fix the issue:
 
 .play -edit demo-code/urlqueryv2/main.go /START/,/END/
 
-## Example #4
+## Example #3
 
-## Example #4
+: Example where it is harder to catch the issue in tests
 
-.code demo-code/snippets/bodyclose.go /START BROKEN/,/END BROKEN/
+## Example #3
 
-: The documentation is very clear about this. It is the caller's responsibility to close Body. The
-: default HTTP client's Transport may not reuse HTTP/1.x "keep-alive" TCP connections if the Body is
-: not read to completion and closed. This has significant implications for performance that would be
-: hard to identify when things don't work as intended.
+.code demo-code/rowserrv1/main.go /START FETCH/,/END FETCH/
 
-## Example #4
+## Example #3
 
-The [bodyclose][bodyclose] linter can detect such issues
+.play -edit demo-code/rowserrv1/main.go /START DEMO/,/END DEMO/
 
-[bodyclose]: https://github.com/timakin/bodyclose
+## Example #3
+
+Linter that can catch this issue - [rowserrcheck][rowserrcheck]:
 
 ```
-snippets/bodyclose.go:16:20: response body must be closed (bodyclose)
-        resp, err := hc.Do(req)
-                          ^
+rowserrv1/main.go:82:30: rows.Err must be checked (rowserrcheck)
+        rows, err := db.QueryContext(ctx, qry)
+                                    ^
 ```
 
-We can fix the issue by draining and closing the response body:
+[rowserrcheck]: https://github.com/jingyugao/rowserrcheck
 
-.code demo-code/snippets/bodyclose.go /START FIXED/,/END FIXED/
+Issue can be fixed with a `rows.Err()` check:
 
-But there is a bug in `bodyclose` linter that flags slight variations of this as an issue.
-See [bodyclose#51][bodyclose-issue-51].
-
-[bodyclose-issue-51]: https://github.com/timakin/bodyclose/issues/51
+.play -edit demo-code/rowserrv2/main.go /START/,/END/
 
 ## Linting in Go
 
@@ -204,7 +149,6 @@ See [bodyclose#51][bodyclose-issue-51].
 1. Why `golangci-lint`?
 2. Why do we need extensive configuration?
 3. Configuration builder sheet walkthrough.
-4. (bonus) Project tooling.
 
 ## golangci-lint
 
@@ -235,16 +179,30 @@ See [bodyclose#51][bodyclose-issue-51].
 
 </table>
 
-: START: Does anyone here remember gometalinter? It was what I remember being popular before
-: golangci-lint was released in 2018. golangci-lint was a huge noticeable improvement in terms of
-: speed and support.
-: But taking a step back, what is golangci-lint?
+: What is golangci-lint? It is a linter aggregator that provides a performant, consistent interface
+: for running 100+ linters.
+: --
+: Among the linters that golangci-lint integrates, there are 2 variants. A linter that has 1 or few
+: related pattern detections like noctx and errorlint. Or a linter that has large number of rules
+: like staticcheck, goritic and revive.
+
+## Adopting golangci-lint
+
+Just run `golangci-lint` in your project and you are done.
+
+```
+$ golangci-lint run
+```
+
+_Right?_
+
+: Hopefully, I have convinced you about using golangci-lint. So just run golangci-lint in your
+: project and you are done, right?
 
 ## Need for configuration
 
-Just run `golangci-lint` in your project and you are done. Right?
-
-Unfortunately, no. We need to do some work to get the best out of golangci-lint.
+Unfortunately, just running `golangci-lint` is not enough. We need to do some work to get the best
+out of `golangci-lint`.
 
 **Default configuration**
 
@@ -277,7 +235,7 @@ style. Some examples:
 - [errorlint][errorlint]: find code that will cause problems with the error wrapping scheme
   introduced in Go 1.13.
 - [gci][gci]: deterministic package import order.
-- [gocognit][gocognit]: enforce cognitive complexity of functions.
+- [gocognit][gocognit]: enforce limit on cognitive complexity of functions.
 - [gofumpt][gofumpt]: a stricter gofmt.
 - [gosec][gosec]: inspect source for **security issues**.
 - [noctx][noctx]: find HTTP requests without `context.Context`.
@@ -307,12 +265,10 @@ and [revive][revive] that are also disabled by default.
 
 [revive]: https://github.com/mgechev/revive
 
-: Among the linters that golangci-lint integrated, there are 2 variants. A linter that has 1 or few
-: related pattern detections like noctx and errorlint. Or a linter that has large number of rules
-: like stylecheck, goritic and revive.
-: --
 : gosec deserves a special mention since it is able to catch security issues like SQL and command
 : injection.
+
+## So just enable everything?
 
 ## So just enable everything?
 
@@ -326,8 +282,8 @@ No, for a few reasons:
   example, [zerologlint][zerologlint] detects the wrong usage of zerolog. If you aren't using
   zerolog, this isn't useful.
 - **Duplication:** With the number of linters supported by `golangci-lint`, it is inevitable that
-  there would be checks duplicated between different linters. For example, `govet` has a check
-  "`structtag`" that is duplicated by revive’s "`struct-tag`" check.
+  there would be checks duplicated between different linters. For example, `govet` has a
+  "`structtag`" check that is duplicated by `revive`'s "`struct-tag`" check.
 - **Premature optimisation:** There are some linters that should be enabled only if the specific
   execution environment has performance constraints. For example, [prealloc][prealloc] is a linter
   that can help with minimising allocations that, IMO, should only be enabled if needed.
@@ -366,59 +322,37 @@ This configuration is also necessary for linters that include multiple rules suc
 
 ## Configuration builder
 
-[golangci-lint-linters-v1.57.1 sheet][golangci-lint-linters-v1-57-1-sheet]
+[golangci-lint-linters-v1.61.0 sheet][golangci-lint-linters-v1-61-0-sheet]
 
-This sheet helps to manage the configuration for golangci-lint. It can also help with generating the
-2 configuration files.
+This sheet helps to manage the configuration for `golangci-lint`.
 
-**Why do we need 2 variants?**
+[golangci-lint-linters-v1-61-0-sheet]: https://docs.google.com/spreadsheets/d/1-pg0JNHOoN8bRer5bRuZFYYPpspYXdwe5wIKjglcvsE/edit?usp=sharing
 
-In my experience, having these 2 variants works well:
-
-1. `.golangci.toml` - local development and testing
-2. `.golangci-prod.toml` - continuous integration (CI)
-
-The difference is that the prod version includes some more intensive checks that may take longer to
-run, but are important for ensuring code quality and security. Some examples of heavy linters that
-we would want to enable only in
-CI: [unused][unused], [gocognit][gocognit], [gocritic][gocritic], [gosec][gosec].
-
-[golangci-lint-linters-v1-57-1-sheet]: https://docs.google.com/spreadsheets/d/1AOin8xMeChW6XL2fufvyjeXBAclqSZ7P7YCi9SMgYEc/edit?usp=sharing
-
-[unused]: https://github.com/dominikh/go-tools/tree/master/unused
-
-[gocognit]: https://github.com/uudashr/gocognit
-
-[gocritic]: https://github.com/go-critic/go-critic
-
-[gosec]: https://github.com/securego/gosec
-
-: This might be somewhat of an overengineering. Typically, you don't need to frequently update the
-: configuration for golangci-lint. And it is quite common to copy and modify configuration from 1
-: repo to another. But it is still useful to have an excel sheet if you are starting from scratch
-: for being able to discuss and gather feedback on the proposed configuration. And when I had
-: finished building the sheet, I used some extra time I had to generate the config from the sheet
-: itself.
+: Typically, you don't need to frequently update the configuration for golangci-lint. And it is
+: quite common to copy and modify configuration from 1 repo to another. But it is still useful to
+: have an excel sheet if you are starting from scratch for being able to discuss and gather feedback
+: on the proposed configuration. And when I had finished building the sheet, I used some extra time
+: I had to generate the config from the sheet itself. So this might be a bit of overengineering.
 : --
-: The configuration was last updated for version v1.57.1 of golangci-lint.
+: The configuration was last updated for version v1.61.0 of golangci-lint.
 : --
 : The configuration is updated in a few seconds whenever any change is made in the sheet by the Apps
 : Script attached to the project (see triggers.gs).
 
 ## Integrating golangci-lint into an existing project
 
-When we are creating a new project, it is straightforward to integrate golangci-lint into it.
+When we are creating a new project, it is straightforward to integrate `golangci-lint` into it.
 
-However, if we are integrating golangci-lint into a pre-existing project where either the linter was
-not integrated or the configuration was minimal, we need a strategy to iteratively fix the large
+However, if we are integrating `golangci-lint` into a pre-existing project where either the linter
+was not integrated or the configuration was minimal, we need a strategy to iteratively fix the large
 number of issues that would be reported by the linter with the new/updated configuration.
 
 Fixing all the issues in a single effort can be inhibitively expensive.
 
 ## Integrating golangci-lint into an existing project
 
-`golangci-lint` provides a mechanism for doing so by reporting issues only for new and modified
-lines in the commit. See [golangci-lint FAQ][golangci-lint-faq].
+`golangci-lint` provides a mechanism for gradual adoption by reporting issues only for new and
+modified lines in the commit. See [golangci-lint FAQ][golangci-lint-faq].
 
 ```
 $ golangci-lint run --help
@@ -460,62 +394,6 @@ updated configuration. Ex: [github.com/goto/compass/pull/38][compass-pr].
 
 : Both VSCode and Goland have plugin support for surfacing issues flagged by golangci-lint.
 
-## (bonus) Project tooling
-
-## Project tooling
-
-Most repositories utilise multiple tools for formatting, code/doc generation and testing. Some
-examples:
-
-- `golangci-lint`: [github.com/golangci/golangci-lint][golangci-lint]
-- `gofumpt`: [github.com/mvdan/gofumpt][gofumpt]
-- `mockery`: [github.com/vektra/mockery][mockery]
-
-Sometimes the version of these tools are different across projects and different developers might
-have different local versions of these tools. The version of these tools needs to be kept consistent
-between local environment and CI as well.
-
-[golangci-lint]: github.com/golangci/golangci-lint
-
-[gofumpt]: github.com/mvdan/gofumpt
-
-[mockery]: github.com/vektra/mockery
-
-## Go module for tools
-
-We can leverage Go modules to manage the necessary tooling by doing the following:
-
-- Add a `go.mod` file under `tools` directory:
-  ```
-  go mod init github.com/{{user}}/{{project}}/tools
-  ```
-- Add a `tools.go` file in the same folder with a build constraint so that it does not get included
-  in the build:
-  ```
-  //go:build tools
-  
-  package tools
-  
-  import (
-    _ "github.com/golangci/golangci-lint/cmd/golangci-lint"
-    // add more imports as needed
-  )
-  ```
-- Run `go mod tidy` to sync the `tools/go.mod` with the tools that are declared in `tools.go`.
-
-## Taskfile
-
-Using the `tools/go.mod`, we can build the tool binaries. [Task][task] can be used for building the
-binaries on demand and for managing the commonly used commands. Taskfile is a more modern
-replacement for Makefiles and also has features for re-building the tools based on checksum of
-module files. Taskfile example: [operationalising-golangci-lint@master/Taskfile.yml][taskfile].
-
-[task]: https://taskfile.dev/
-
-[taskfile]: https://github.com/sudo-suhas/operationalising-golangci-lint/blob/master/Taskfile.yml
-
-: It is also important to provide an easy way to format code with a simple command like "task fmt".
-
 ## Summary
 
 - Linters detect and flag predefined 'patterns'.
@@ -526,7 +404,6 @@ module files. Taskfile example: [operationalising-golangci-lint@master/Taskfile.
 - The configuration builder sheet can help you get started.
 - For existing projects, leverage the `--new-from-rev` option provided by `golangci-lint` to fix
   issues iteratively.
-- (bonus) Leverage Go modules and Taskfile for managing your project tooling and commonly run tasks.
 
 ## Special Thank You
 
@@ -537,9 +414,9 @@ grateful to them. Thank you!
 
 Talk material:
 
-.image assets/bitly-qr-code.jpg 350 _
+.image assets/bitly-qr-code.png 350 _
 <p style="text-align: center;">
-  <a href="https://bit.ly/go-mtp-blr-linters-v1">https://bit.ly/go-mtp-blr-linters-v1</a> 
+  <a href="https://bit.ly/gophercon-in-2024-linters-v1">https://bit.ly/gophercon-in-2024-linters-v1</a> 
 </p>
 
 [bitly-link]: https://bit.ly/go-mtp-blr-linters-v1
