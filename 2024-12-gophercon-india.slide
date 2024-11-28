@@ -22,38 +22,40 @@ https://www.linkedin.com/in/skaranth90/
 
 ## What are linters?
 
-A linter is a program which performs static code analysis to flag programming errors, bugs,
-stylistic errors and suspicious constructs. The term originates from a Unix utility that examined C
-language source code.
+- Static code analysis tools
+- Flag potential bugs and code style issues
 
-In simple terms, a linter identifies and flags predefined 'patterns'. These patterns could be
-related to potential bugs or code style.
+Trivia: The term originates from a Unix utility that examined C language source code.
 
 : Static code analysis means that we analyze the code without executing it.
 
 ## Why use linters?
 
-- **[Shift-Left Testing][shift-left-testing]**: _Bugs are cheap when caught young_. We would be
-  moving bug detection from tests to linters. Faster feedback means improved quality and speed of
-  delivery.
+- **[Shift-Left Testing][shift-left-testing]**
 - **Code style**:
 	- Consistency
 	- Readability
 	- Slightly faster speed of delivery
 	- Avoid inconsequential debates (ex: `gofmt` for tabs vs spaces)
-- **Guardrails**: A good linter setup acts as guardrails for both experienced and new developers to
-  avoid tricky bugs; but it is more helpful for newbies. Not all bugs are easily caught in tests
-  either.
+- **Guardrails**
 
 [shift-left-testing]: https://www.drdobbs.com/shift-left-testing/184404768
 
-: [Shift-Left Testing]: If you think of the feature lifecycle, we have product requirement
-: gathering, architectural design, implementation with unit tests, integration tests etc. The idea
-: is to try and move the identification of the issue 'left'. So if there was a problem that you
-: usually catch in integration tests, try to catch in unit tests. In this case, detection of bug can
-: move from unit tests to linters. Ideally, the IDE should flag issues right when we are coding.
-: [Consistency] For code constructs + package/function/type names. Ex: Effective Go guidelines on
-: package names. Consistency helps readability which in turn helps maintainability.
+: [Shift-Left Testing]:
+: - Feature lifecycle - Product requirement gathering, architectural design, implementation, unit
+: tests, integration tests etc.
+: - Objective: Detect issues earlier
+: - Rationale: Bugs are cheap when caught young
+: - Win: Faster feedback => improved quality and speed of delivery.
+: - Contextual: Move detection of bugs from unit tests/integration tests to development stage.
+: [Consistency]:
+: - Scope: code constructs + package/function/type names. Ex: Effective Go guidelines on package
+: names.
+: - Rationale: Consistency => readability => maintainability.
+: [Guardrails]:
+: - For both experienced and new developers, avoid tricky bugs
+: - More helpful for newbies
+: - Not all bugs are easily caught in tests either.
 
 ## Examples
 
@@ -68,13 +70,31 @@ related to potential bugs or code style.
 
 ## Example #1
 
+.image assets/errorsas/errorsas-01.png _ 957
+
+## Example #1
+
+.image assets/errorsas/errorsas-02.png _ 957
+
+## Example #1
+
+.image assets/errorsas/errorsas-03.png _ 957
+
+## Example #1
+
+.image assets/errorsas/errorsas-04.png _ 957
+
+## Example #1
+
+.code demo-code/snippets/errorsas.go /START BROKEN/,/END BROKEN/
+
+## Example #1
+
 Issue can be fixed by passing a pointer to `*MyError`, the type implementing error.
 
 .code demo-code/snippets/errorsas.go /START FIXED/,/END FIXED/
 
-`go vet` can flag the issue in this case. By default, `go test` runs a high-confidence subset of
-`go vet` checks - `atomic`, `bool`, `buildtags`, `directive`, `errorsas`, `ifaceassert`, `nilfunc`,
-`printf`, and `stringintconv`.
+`go vet` can flag the issue in this case.
 
 ```
 $ go tool vet help errorsas
@@ -91,7 +111,45 @@ snippets/errorsas.go:21:6: second argument to errors.As must be a non-nil pointe
 type that implements error, or to any interface type
 ```
 
+: By default, `go test` runs a high-confidence subset of `go vet` checks which includes `errorsas`.
+
 ## Example #2
+
+## Example #2
+
+.code demo-code/urlqueryv1/main.go /START/,/END/
+
+## Example #2
+
+<p style="margin: -20px">
+
+.image assets/urlquery/urlquery-01.png _ 979
+
+</p>
+
+## Example #2
+
+<p style="margin: -20px">
+
+.image assets/urlquery/urlquery-02.png _ 979
+
+</p>
+
+## Example #2
+
+<p style="margin: -20px">
+
+.image assets/urlquery/urlquery-03.png _ 979
+
+</p>
+
+## Example #2
+
+<p style="margin: -20px">
+
+.image assets/urlquery/urlquery-04.png _ 979
+
+</p>
 
 ## Example #2
 
@@ -124,7 +182,87 @@ Small changes are needed to fix the issue:
 
 ## Example #3
 
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-01.png _ 979
+
+</p>
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-02.png _ 979
+
+</p>
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-03.png _ 979
+
+</p>
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-04.png _ 979
+
+</p>
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-05.png _ 979
+
+</p>
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-06.png _ 979
+
+</p>
+
+## Example #3
+
+.code demo-code/rowserrv1/main.go /START DEMO/,/END DEMO/
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-07.png _ 979
+
+</p>
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-08.png _ 979
+
+</p>
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-09.png _ 979
+
+</p>
+
+## Example #3
+
 .play -edit demo-code/rowserrv1/main.go /START DEMO/,/END DEMO/
+
+## Example #3
+
+.code demo-code/rowserrv1/main.go /START FETCH/,/END FETCH/
 
 ## Example #3
 
@@ -141,6 +279,14 @@ rowserrv1/main.go:82:30: rows.Err must be checked (rowserrcheck)
 Issue can be fixed with a `rows.Err()` check:
 
 .play -edit demo-code/rowserrv2/main.go /START/,/END/
+
+## Example #3
+
+<p style="margin: -20px">
+
+.image assets/rowserr/rowserr-10.png _ 979
+
+</p>
 
 ## Linting in Go
 
@@ -181,10 +327,6 @@ Issue can be fixed with a `rows.Err()` check:
 
 : What is golangci-lint? It is a linter aggregator that provides a performant, consistent interface
 : for running 100+ linters.
-: --
-: Among the linters that golangci-lint integrates, there are 2 variants. A linter that has 1 or few
-: related pattern detections like noctx and errorlint. Or a linter that has large number of rules
-: like staticcheck, goritic and revive.
 
 ## Adopting golangci-lint
 
@@ -201,12 +343,11 @@ _Right?_
 
 ## Need for configuration
 
-Unfortunately, just running `golangci-lint` is not enough. We need to do some work to get the best
-out of `golangci-lint`.
+Unfortunately, just running `golangci-lint` is not enough.
 
 **Default configuration**
 
-`golangci-lint` integrates 100+ linters but by default, it enables a very small set of linters:
+`golangci-lint` enables a very small set of linters by default:
 
 - [errcheck][errcheck]
 - [gosimple][gosimple]
@@ -229,25 +370,19 @@ out of `golangci-lint`.
 
 ## Useful linters disabled by default
 
-There are many more extremely useful linters that can help uncover bugs and ensure consistent code
-style. Some examples:
+There are many more extremely useful linters that are disabled by default. Some examples:
 
-- [errorlint][errorlint]: find code that will cause problems with the error wrapping scheme
-  introduced in Go 1.13.
-- [gci][gci]: deterministic package import order.
+- [errorlint][errorlint]: for error wrapping scheme introduced in Go 1.13.
 - [gocognit][gocognit]: enforce limit on cognitive complexity of functions.
 - [gofumpt][gofumpt]: a stricter gofmt.
 - [gosec][gosec]: inspect source for **security issues**.
 - [noctx][noctx]: find HTTP requests without `context.Context`.
 - [rowserrcheck][rowserrcheck], [sqlclosecheck][sqlclosecheck]: ensure correct usage of
   `database/sql` package.
-
-In addition to these, there are linters with numerous rules such as [gocritic][gocritic]
-and [revive][revive] that are also disabled by default.
+- [gocritic][gocritic]: 100+ diagnostic checks
+- [revive][revive]: faster, configurable golint
 
 [errorlint]: https://github.com/polyfloyd/go-errorlint
-
-[gci]: https://github.com/daixiang0/gci
 
 [gocognit]: https://github.com/uudashr/gocognit
 
@@ -265,6 +400,7 @@ and [revive][revive] that are also disabled by default.
 
 [revive]: https://github.com/mgechev/revive
 
+: These linters can help uncover bugs and ensure consistent code style.
 : gosec deserves a special mention since it is able to catch security issues like SQL and command
 : injection.
 
@@ -274,25 +410,21 @@ and [revive][revive] that are also disabled by default.
 
 No, for a few reasons:
 
-- **Noise:** Not all linters are useful for your specific use-case. For
-  example, [decorder][decorder] is declaration order linter for Go. We sometimes intentionally
-  colocate different declaration types out of order to aid cognition so we wouldn't want to enable
-  it.
-- **Ineffective:** Some linters are useful in a specific context. For
-  example, [zerologlint][zerologlint] detects the wrong usage of zerolog. If you aren't using
-  zerolog, this isn't useful.
-- **Duplication:** With the number of linters supported by `golangci-lint`, it is inevitable that
-  there would be checks duplicated between different linters. For example, `govet` has a
-  "`structtag`" check that is duplicated by `revive`'s "`struct-tag`" check.
-- **Premature optimisation:** There are some linters that should be enabled only if the specific
-  execution environment has performance constraints. For example, [prealloc][prealloc] is a linter
-  that can help with minimising allocations that, IMO, should only be enabled if needed.
+- **Noise:** Not all linters match _your_ style.
+- **Ineffective:** Some linters are useful only in a specific context.
+- **Duplication:** Some checks are duplicated between different linters.
+- **Premature optimisation:** Use in constrained execution environments.
 
 [decorder]: https://gitlab.com/bosi/decorder
 
 [zerologlint]: https://github.com/ykadowak/zerologlint
 
 [prealloc]: https://github.com/alexkohler/prealloc
+
+: - [Noise]: Opinions might differ. False positives. exhaustruct
+: - [Ineffective]: zerologlint for zerolog
+: - [Duplication]: govet and revive both have a structtag check. 
+: - [Premature optimisation]: prealloc
 
 : I know of 40+ checks that are duplicated across different linters. Disabling duplicate checks and
 : linters has a performance benefit as well.
@@ -301,24 +433,18 @@ No, for a few reasons:
 
 ## Individual linter configuration
 
-For many of the linters, individual configuration is needed to get the desired behaviour. For
-example, for `gci`, we would want to have the following configuration:
+For many of the linters, individual configuration is needed to get the desired behaviour. 
+
+For example, for `gofumpt`, we might want to have the following configuration:
 
 ```
-[linters-settings.gci]
-  sections = [
-    # Standard section: captures all standard packages.
-    "standard",
-    # Default section: contains all imports that could not be matched to another section type.
-    "default",
-    # Custom section: groups all imports with the specified Prefix.
-    "prefix(github.com/netskope,github.com/netSkope)",
-  ]
-  custom-order = true
+  # Choose whether to use the extra rules.
+  # Default: false
+  extra-rules = true
 ```
 
-This configuration is also necessary for linters that include multiple rules such as `gocritic` and
-`revive` because we would want a subset of the available rules.
+: This configuration is also necessary for linters that include multiple rules such as gocritic 
+: and revive because we would want a subset of the available rules.
 
 ## Configuration builder
 
@@ -335,24 +461,31 @@ This sheet helps to manage the configuration for `golangci-lint`.
 : I had to generate the config from the sheet itself. So this might be a bit of overengineering.
 : --
 : The configuration was last updated for version v1.61.0 of golangci-lint.
+: The configuration is not perfect for everyone.
 : --
 : The configuration is updated in a few seconds whenever any change is made in the sheet by the Apps
 : Script attached to the project (see triggers.gs).
 
-## Integrating golangci-lint into an existing project
+## Problem: Integrating golangci-lint into a project
 
-When we are creating a new project, it is straightforward to integrate `golangci-lint` into it.
+**New project** 
 
-However, if we are integrating `golangci-lint` into a pre-existing project where either the linter
-was not integrated or the configuration was minimal, we need a strategy to iteratively fix the large
-number of issues that would be reported by the linter with the new/updated configuration.
+- No problem
 
-Fixing all the issues in a single effort can be inhibitively expensive.
+**Pre-existing project** 
 
-## Integrating golangci-lint into an existing project
+- Large number of issues could be reported
+- _Fixing all the issues in a single effort can be **inhibitively expensive**._
+
+: When we are creating a new project, it is straightforward to integrate golangci-lint into it.
+: However, if we are integrating `golangci-lint` into a pre-existing project where either the linter
+: was not integrated or the configuration was minimal, we need a strategy to iteratively fix the
+: large number of issues that would be reported by the linter with the new/updated configuration.
+
+## Solution: Integrating golangci-lint into an existing project
 
 `golangci-lint` provides a mechanism for gradual adoption by reporting issues only for new and
-modified lines in the commit. See [golangci-lint FAQ][golangci-lint-faq].
+modified lines in the commit. .
 
 ```
 $ golangci-lint run --help
@@ -365,34 +498,13 @@ Flags:
       --new-from-rev REV               Show only new issues created after git revision REV
 ```
 
-The official Github action provided by authors of `golangci-lint` also supports a configuration
-option `only-new-issues` which can show only the issues that were introduced by a pull request etc.
-See [github.com/golangci/golangci-lint-action#only-new-issues][golangci-lint-action-only-new-issues].
-
-I would also recommend picking a subset of reported issues and fixing those when integrating the
-updated configuration. Ex: [github.com/goto/compass/pull/38][compass-pr].
+See [golangci-lint FAQ][golangci-lint-faq].
 
 [golangci-lint-faq]: https://golangci-lint.run/welcome/faq/#how-to-integrate-golangci-lint-into-large-project-with-thousands-of-issues
 
-[golangci-lint-action-only-new-issues]: https://github.com/golangci/golangci-lint-action#only-new-issues
-
-[compass-pr]: https://github.com/goto/compass/pull/38
-
-## Should do
-
-- Configure `golangci-lint` and formatters right into the IDE. For `golangci-lint`,
-  see [golangci-lint.run/welcome/integrations/][golangci-lint-integrations]. If you are using
-  `gofumpt`, which I would highly recommend, the instructions for setting it up are documented in
-  the [readme][gofumpt-installation].
-- Integrate pre-commit: [https://pre-commit.com/][pre-commit].
-
-[golangci-lint-integrations]: https://golangci-lint.run/welcome/integrations/
-
-[gofumpt-installation]: https://github.com/mvdan/gofumpt?tab=readme-ov-file#installation
-
-[pre-commit]: https://pre-commit.com/
-
-: Both VSCode and Goland have plugin support for surfacing issues flagged by golangci-lint.
+: The official Github action provided by authors of `golangci-lint` also supports a configuration
+: option `only-new-issues` which can show only the issues that were introduced by a pull request 
+: etc.
 
 ## Summary
 

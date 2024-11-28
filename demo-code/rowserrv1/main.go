@@ -50,18 +50,6 @@ func run() error {
 }
 
 // START DEMO // OMIT
-func demo(ctx context.Context, db *sql.DB) error {
-	fmt.Println("1st attempt:")
-	if err := printCustomers(ctx, db); err != nil {
-		return fmt.Errorf("demo: #1: %w", err)
-	}
-	fmt.Println("2nd attempt:")
-	if err := printCustomers(ctx, db); err != nil {
-		return fmt.Errorf("demo: #2: %w", err)
-	}
-	return nil
-}
-
 func printCustomers(ctx context.Context, db *sql.DB) error {
 	cc, err := fetchCustomers(ctx, db)
 	if err != nil {
@@ -72,6 +60,18 @@ func printCustomers(ctx context.Context, db *sql.DB) error {
 		fmt.Printf("\t%d: %s (%s)\n", c.ID, c.Name, c.Country)
 	}
 
+	return nil
+}
+
+func demo(ctx context.Context, db *sql.DB) error {
+	fmt.Println("1st attempt:")
+	if err := printCustomers(ctx, db); err != nil {
+		return fmt.Errorf("demo: #1: %w", err)
+	}
+	fmt.Println("2nd attempt:")
+	if err := printCustomers(ctx, db); err != nil {
+		return fmt.Errorf("demo: #2: %w", err)
+	}
 	return nil
 }
 
