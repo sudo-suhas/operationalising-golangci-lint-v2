@@ -1,7 +1,7 @@
 # Operationalising golangci-lint
 : @formatter:off
 Leveraging Go Linters for Robust Code Quality
-01 Dec 2024
+02 Dec 2024
 Tags: linters, golangci-lint
 Summary: Configuring golangci-lint for better Go code.
 
