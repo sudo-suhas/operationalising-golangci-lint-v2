@@ -300,17 +300,21 @@ Issue can be fixed with a `rows.Err()` check:
 
 [https://golangci-lint.run/][golangci-lint-home]
 
+[golangci-lint-home]: https://golangci-lint.run/
+
+<p style="margin-top:  -15px;">
+
 > _It runs linters in parallel, uses caching, supports YAML configuration,
 > integrates with all major IDEs, and includes over a hundred linters._
 
-[golangci-lint-home]: https://golangci-lint.run/
+</p>
 
 <table style="margin-top:  -10px;">
 <tr>
 <td><b>Popular</b></td>
 <td>
 
-.image assets/golangci-lint-popularity.png _ 550
+.image assets/golangci-lint-popularity.png _ 520
 
 </td>
 </tr>
@@ -318,7 +322,7 @@ Issue can be fixed with a `rows.Err()` check:
 <td><b>Actively maintained</b></td>
 <td>
 
-.image assets/golangci-lint-pulse-insights.png 350 _
+.image assets/golangci-lint-pulse-insights.png 380 _
 
 </td>
 </tr>
